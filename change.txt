@@ -1,0 +1,2 @@
+1.add lots of log.so that we known why app performace bad.performance
+2.add weak network optimization.when network are bad.
