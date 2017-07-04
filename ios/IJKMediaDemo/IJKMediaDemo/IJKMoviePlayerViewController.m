@@ -73,19 +73,31 @@
     // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
 
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+//    [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"];
+//    [options setFormatOptionValue:@"audio" forKey:@"sync"];
+//    [options setPlayerOptionIntValue:1 forKey:@"videotoolbox-handle-resolution-change"];
+//    [options setPlayerOptionIntValue:1 forKey:@"packet-buffering"];
+////    
+////    // Set probing size in bytes, i.e. the size of the data to analyze to get stream information. A higher value will enable detecting more information in case it is dispersed into the stream, but will increase latency. Must be an integer not lesser than 32. It is 5000000 by default.
+////    [options setFormatOptionIntValue:32 forKey:@"probesize"];
+////
+////    // Specify how many microseconds are analyzed to probe the input. A higher value will enable detecting more accurate information, but will increase latency. It defaults to 5,000,000 microseconds = 5 seconds.
+//    [options setFormatOptionIntValue:0 forKey:@"analyzeduration"];
+////
+////    // Set number of frames used to probe fps.
+//    [options setFormatOptionIntValue:1 forKey:@"fpsprobesize"];
+    
+    
+    //begin dhlu
     [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"];
     [options setFormatOptionValue:@"audio" forKey:@"sync"];
     [options setPlayerOptionIntValue:1 forKey:@"videotoolbox-handle-resolution-change"];
-    [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];
-//    
-//    // Set probing size in bytes, i.e. the size of the data to analyze to get stream information. A higher value will enable detecting more information in case it is dispersed into the stream, but will increase latency. Must be an integer not lesser than 32. It is 5000000 by default.
-//    [options setFormatOptionIntValue:32 forKey:@"probesize"];
-//
-//    // Specify how many microseconds are analyzed to probe the input. A higher value will enable detecting more accurate information, but will increase latency. It defaults to 5,000,000 microseconds = 5 seconds.
+    [options setPlayerOptionIntValue:5 forKey:@"min-frames"];
+    [options setPlayerOptionIntValue:1 forKey:@"packet-buffering"];//first should be no buffer.open it after rendering.
     [options setFormatOptionIntValue:0 forKey:@"analyzeduration"];
-//
-//    // Set number of frames used to probe fps.
     [options setFormatOptionIntValue:1 forKey:@"fpsprobesize"];
+    //end dhlu
+    
     
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:self.url withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;

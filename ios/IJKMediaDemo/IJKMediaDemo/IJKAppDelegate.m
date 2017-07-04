@@ -16,8 +16,38 @@
 
 #import "IJKAppDelegate.h"
 #import "IJKDemoMainViewController.h"
-
+// dhlu,begin
+//#import "STDPingServices.h"
+//
+//static STDPingServices    *pingServices=NULL;
+//dhlu,end
 @implementation IJKAppDelegate
+
+// dhlu,begin,test code.when you need it .you can open it.
+//- (void)_pingActionFired {
+//    
+//    NSLog(@"pingstart...");
+//    
+//    pingServices = [STDPingServices startPingAddress:@"www.baidu.com" sendnum:2 callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
+//        if (pingItem.status != STDPingStatusFinished) {
+//            //[weakSelf.textView appendText:pingItem.description];
+//            NSLog(@"%@",pingItem.description);
+//        } else {
+//            
+//            NSLog(@"%f",[STDPingItem getLossPercent]);
+//            NSLog(@"%li",[STDPingItem staticAvgRtridTime]);
+//            //NSLog(@"%@",[STDPingItem statisticsWithPingItems:pingItems]);
+//            /*
+//             [weakSelf.textView appendText:[STDPingItem statisticsWithPingItems:pingItems]];
+//             [button setTitle:@"Ping" forState:UIControlStateNormal];
+//             button.tag = 10001;
+//             weakSelf.pingServices = nil;
+//             */
+//        }
+//    }];
+//}
+
+//dhlu,end
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -29,6 +59,11 @@
     self.window.rootViewController = self.viewController;
 
     [self.window makeKeyAndVisible];
+    
+    
+    //dhlu ping test
+    //[self _pingActionFired];
+    //end dhlu.
     
     return YES;
 }

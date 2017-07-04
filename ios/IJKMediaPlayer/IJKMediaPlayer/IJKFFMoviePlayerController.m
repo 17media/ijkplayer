@@ -34,6 +34,14 @@
 #include "string.h"
 #include "ijkplayer/version.h"
 
+//dhlu
+#include "WeakNetwork.h"
+#include "TextLog.h"
+#include "ijkplayer.h"
+#include "ijkplayer_internal.h"
+//end dhlu
+
+
 static const char *kIJKFFRequiredFFmpegVersion = "ff3.1--ijk0.6.1--20160824--001";
 
 typedef uint64_t (^VideoSyncTimestampCallback)(uint64_t timestamp);
@@ -73,8 +81,13 @@ typedef void(^VideoSyncFinishCallback)(uint64_t timestamp);
     AVAppAsyncStatistic _asyncStat;
     BOOL _shouldShowHudView;
     NSTimer *_hudTimer;
+    NSTimer *_weaknetworkTimer;
     
     NSURL *_streamURL;
+    //dhlu
+    long _buffer_start_time;
+    int  _bufferingTimes;//don't count the first one buffring.
+    //end dhlu
 }
 
 @synthesize view = _view;
@@ -155,7 +168,10 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
 {
     if (aUrl == nil)
         return nil;
-
+    //dhlu begin,debug inpul enter.
+    [self startWeaknetTimer];
+    _bufferingTimes = -1;
+    //dhlu end
     // Detect if URL is file path and return proper string for it
     NSString *aUrlString = [aUrl isFileURL] ? [aUrl path] : [aUrl absoluteString];
 
@@ -168,7 +184,10 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
 {
     if (aUrlString == nil)
         return nil;
-
+    //dhlu begin
+    [self startWeaknetTimer];
+    _bufferingTimes = -1;
+    //dhlu end
     self = [super init];
     if (self) {
         ijkmp_global_init();
@@ -326,6 +345,9 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
     if (!_mediaPlayer)
         return;
 
+    //dhlu begin,for log bftimes.
+    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&type=play&bftimes=%d",_bufferingTimes];
+    //dhlu end
     [self setScreenOn:NO];
 
     [self stopHudTimer];
@@ -419,12 +441,14 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
         NSString *message = [NSString stringWithFormat:@"actual: %s\n expect: %s\n", actualVersion, expectVersion];
         IJKLog(@"\n!!!!!!!!!!\n%@\n!!!!!!!!!!\n", message);
         if (showAlert) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unexpected FFmpeg version"
-                                                                message:message
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-            [alertView show];
+            //dhlu begin,for debug.
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unexpected FFmpeg version"
+//                                                                message:message
+//                                                               delegate:nil
+//                                                      cancelButtonTitle:@"OK"
+//                                                      otherButtonTitles:nil];
+//            [alertView show];
+            //dhlu end
         }
         return NO;
     }
@@ -706,6 +730,17 @@ inline static NSString *formatedSpeed(int64_t bytes, int64_t elapsed_milli) {
     }
 }
 
+ //dhlu
+- (void)refreshWeakNetwork{
+    if (_mediaPlayer == nil)
+        return;
+    int64_t bps = ijkmp_read_total_bytes(_mediaPlayer) * 8;
+    int64_t tcpSpeed = ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_TCP_SPEED, 0);
+   
+    [WeakNetwork ajust_buffer_timer:tcpSpeed mplay:_mediaPlayer btr:bps];
+    
+}
+//end dhlu
 - (void)refreshHudView
 {
     if (_mediaPlayer == nil)
@@ -793,6 +828,41 @@ inline static NSString *formatedSpeed(int64_t bytes, int64_t elapsed_milli) {
                           formatedDurationMilli(_monitor.lastHttpSeekDuration),
                           _monitor.httpSeekCount]
                   forKey:@"t-http-seek"];
+}
+
+- (void)startWeaknetTimer
+{
+
+    if (_weaknetworkTimer != nil)
+        return;
+    
+    if ([[NSThread currentThread] isMainThread]) {
+        
+        _weaknetworkTimer = [NSTimer scheduledTimerWithTimeInterval:1.f//.5f
+                                                     target:self
+                                                   selector:@selector(refreshWeakNetwork)
+                                                   userInfo:nil
+                                                    repeats:YES];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self startWeaknetTimer];
+        });
+    }
+}
+
+- (void)stopWeaknetTimer
+{
+    if (_weaknetworkTimer == nil)
+        return;
+    
+    if ([[NSThread currentThread] isMainThread]) {
+        [_weaknetworkTimer invalidate];
+        _weaknetworkTimer = nil;
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self stopWeaknetTimer];
+        });
+    }
 }
 
 - (void)startHudTimer
@@ -1031,6 +1101,15 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
             [self changeNaturalSize];
             break;
         case FFP_MSG_BUFFERING_START: {
+            //dhlu
+            NSDate * date = [NSDate date];
+            _buffer_start_time = date.timeIntervalSince1970;
+            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bs&type=play&bst=%lld",_buffer_start_time];
+            _bufferingTimes++;
+            if(_bufferingTimes>=1){
+                [WeakNetwork set_buffering ];//has buffering.
+            }
+            //end dhlu.
             IJKLog(@"FFP_MSG_BUFFERING_START:\n");
 
             _monitor.lastPrerollStartTick = (int64_t)SDL_GetTickHR();
@@ -1043,6 +1122,12 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
             break;
         }
         case FFP_MSG_BUFFERING_END: {
+            //dhlu
+            NSDate * date = [NSDate date];
+            long nowTime = date.timeIntervalSince1970;
+            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=be&type=play&bfT=%ld",nowTime-_buffer_start_time];//record buffer time.
+            //end dhlu
+            
             IJKLog(@"FFP_MSG_BUFFERING_END:\n");
 
             _monitor.lastPrerollDuration = (int64_t)SDL_GetTickHR() - _monitor.lastPrerollStartTick;
@@ -1093,8 +1178,15 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
             break;
         }
         case FFP_MSG_VIDEO_RENDERING_START: {
+            //dhlu
+            //_mediaPlayer->ffplayer->packet_buffering = 1;
+            //end dhlu.
             IJKLog(@"FFP_MSG_VIDEO_RENDERING_START:\n");
+            [self LogBaseInfo];
+            
             _monitor.firstVideoFrameLatency = (int64_t)SDL_GetTickHR() - _monitor.prepareStartTick;
+            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=&type=play&lsid=&fs=%lld&sip=",_monitor.firstVideoFrameLatency];
+            
             [[NSNotificationCenter defaultCenter]
              postNotificationName:IJKMPMoviePlayerFirstVideoFrameRenderedNotification
              object:self];
@@ -1119,7 +1211,11 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
 
     [_msgPool recycle:msg];
 }
-
+- (void)LogBaseInfo{
+    int64_t bps = ijkmp_read_total_bytes(_mediaPlayer) * 8;
+    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bsi&type=play&lsid=%@&sip=%@&pt=%@&url=%@&bps=%lld",
+     _liveId,_streamURL.host,_commentProtocol,_urlString,bps];
+}
 - (IJKFFMoviePlayerMessage *) obtainMessage {
     return [_msgPool obtain];
 }
