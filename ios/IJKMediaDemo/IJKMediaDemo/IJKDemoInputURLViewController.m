@@ -40,9 +40,21 @@
     //dhlu
     //self.textView.text = @"http://10002ir.pili-live-hdl.support2technical.me/17app/5825ace075b625125100f420.flv";
     //end
+    //recevie log notification.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NotificationFromIJK:) name:@"NotificationFromIJK_Log" object:nil];
+    //end.
+}
+
+- (void) NotificationFromIJK:(NSNotification *)notification{
+    
+    if ([[notification name] isEqualToString:@"NotificationFromIJK_Log"]){
+        NSString *theString = [notification object];
+        int k=0;
+    }
 }
 
 - (void)onClickPlayButton {
+    //
     NSURL *url = [NSURL URLWithString:self.textView.text];
     NSString *scheme = [[url scheme] lowercaseString];
     

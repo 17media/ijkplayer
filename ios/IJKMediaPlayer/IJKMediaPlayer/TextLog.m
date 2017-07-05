@@ -117,7 +117,7 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&lngt=%@&ltt=%@&mip=%@&rg=%@&av17=%@&\r\n",
+    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&lngt=%@&ltt=%@&mip=%@&rg=%@&av17=%@&",
                  time,mc,uid,lt,os,osv,mod,carrier,nt,lngt,ltt,mip,rg,av17];
     
     return  publicStr;
@@ -157,7 +157,9 @@ static STDPingServices    *pingServices=NULL;
     //NSString *str = [NSString stringWithFormat:@"time=%@&%@\r\n",time,string];
     NSString *str = [NSString stringWithFormat:@"%@\r\n",string];
     //NSString *str = [NSString stringWithFormat:@"%@%@\r\n",GetPublicText(),string];
-    
+    //send to app
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: str];
+    //end
     NSData* stringData  = [str dataUsingEncoding:NSUTF8StringEncoding];
     
     [fileHandle writeData:stringData]; //追加写入数据
