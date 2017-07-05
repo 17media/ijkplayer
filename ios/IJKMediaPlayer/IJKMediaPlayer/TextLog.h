@@ -13,7 +13,8 @@
 
 @interface TextLog : NSObject
 
-//set public logt;
+//set public ;
++(void)Setpt:(NSString*)ptstr;
 +(void)Setmc:(NSString*)mcstr;
 +(void)SetUid:(NSString*)id;
 +(void)Setlt:(NSString*)ltstr;
@@ -25,7 +26,9 @@
 +(void)Setlngt:(NSString*)lngtstr;
 +(void)Setltt:(NSString*)lttstr;
 +(void)Setmip:(NSString*)mipstr;
++(void)Seturl:(NSString*)urlstr;
 +(void)Setrg:(NSString*)rgstr;
++(void)Sethost:(NSString*)hoststr;
 
 +(void)LogPublicText:(NSString*)fileName;
 +(void)LogText:(NSString *)fileName format:(NSString *)format, ...;

@@ -10,7 +10,9 @@
 #import "TextLog.h"
 #import "STDPingServices.h"
 
-static NSString *mc=@"11";//mac id
+
+static NSString *pt=@"";//scheme,protocal type.
+static NSString *mc=@"";//mac id
 static NSString *uid=@"";//User Id
 static NSString *lt=@"";//Log type
 static NSString *os=@"";//os type
@@ -20,14 +22,22 @@ static NSString *carrier=@"";
 static NSString *nt=@"";//net type
 static NSString *lngt=@"";
 static NSString *ltt=@"";
-static NSString *mip=@"";//public ip.
+static NSString *mip=@"";//my public ip.
+static NSString *url=@"";//url
 static NSString *rg=@"";//computer region.
 static NSString *av17=@"";//app version 17media.
+static NSString *host=@"";
 static NSString *publicStr=@"";//app version 17media.
+
 
 static STDPingServices    *pingServices=NULL;
 
 @implementation TextLog : NSObject
+
+
++(void)Setpt:(NSString*)ptstr{
+    pt = ptstr;
+}
 
 +(void)Setmc:(NSString*)mcstr{
     mc = mcstr;
@@ -73,8 +83,17 @@ static STDPingServices    *pingServices=NULL;
     mip = mipstr;
 }
 
++(void)Seturl:(NSString*)urlstr{
+    url = urlstr;
+}
+
+
 +(void)Setrg:(NSString*)rgstr{
     rg = rgstr;
+}
+
++(void)Sethost:(NSString*)hoststr{
+    host = hoststr;
 }
 
 + (void)_pingActionFired {
@@ -117,8 +136,10 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&lngt=%@&ltt=%@&mip=%@&rg=%@&av17=%@&",
-                 time,mc,uid,lt,os,osv,mod,carrier,nt,lngt,ltt,mip,rg,av17];
+    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
+                 time,mc,uid,lt,os,osv,mod,carrier,nt,mip,rg,av17,pt,host,url];
+    //    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&lngt=%@&ltt=%@&mip=%@&rg=%@&av17=%@&",
+    //                 time,mc,uid,lt,os,osv,mod,carrier,nt,lngt,ltt,mip,rg,av17];
     
     return  publicStr;
 }
@@ -155,11 +176,11 @@ static STDPingServices    *pingServices=NULL;
     NSString *time = [TextLog GetTimeStr];
     
     //NSString *str = [NSString stringWithFormat:@"time=%@&%@\r\n",time,string];
+    //send to app
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: string];
+    //end
     NSString *str = [NSString stringWithFormat:@"%@\r\n",string];
     //NSString *str = [NSString stringWithFormat:@"%@%@\r\n",GetPublicText(),string];
-    //send to app
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: str];
-    //end
     NSData* stringData  = [str dataUsingEncoding:NSUTF8StringEncoding];
     
     [fileHandle writeData:stringData]; //追加写入数据

@@ -85,6 +85,7 @@ typedef void(^VideoSyncFinishCallback)(uint64_t timestamp);
     
     NSURL *_streamURL;
     //dhlu
+    NSURL *_URL;//for log.
     long _buffer_start_time;
     int  _bufferingTimes;//don't count the first one buffring.
     //end dhlu
@@ -184,10 +185,7 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
 {
     if (aUrlString == nil)
         return nil;
-    //dhlu begin
-    [self startWeaknetTimer];
-    _bufferingTimes = -1;
-    //dhlu end
+
     self = [super init];
     if (self) {
         ijkmp_global_init();
@@ -210,7 +208,14 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
 
         // init media resource
         _urlString = aUrlString;
-
+        //dhlu
+        if (!_streamURL) {
+            _URL = [NSURL URLWithString:_urlString];
+            [TextLog Seturl:_urlString];
+            [TextLog Sethost:_URL.host];
+            [TextLog Setpt:_URL.scheme];            
+        }
+        //end dhlu
         // init player
         _mediaPlayer = ijkmp_ios_create(media_player_msg_loop);
         _msgPool = [[IJKFFMoviePlayerMessagePool alloc] init];
@@ -1212,6 +1217,8 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
     [_msgPool recycle:msg];
 }
 - (void)LogBaseInfo{
+    //set some base info
+    
     int64_t bps = ijkmp_read_total_bytes(_mediaPlayer) * 8;
     [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bsi&type=play&lsid=%@&sip=%@&pt=%@&url=%@&bps=%lld",
      _liveId,_streamURL.host,_commentProtocol,_urlString,bps];
