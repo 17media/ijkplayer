@@ -17,6 +17,8 @@
 +(void)Setpt:(NSString*)ptstr;
 +(void)Setmc:(NSString*)mcstr;
 +(void)SetUid:(NSString*)id;
++(void)Setsd:(NSString*)sdstr;
++(void)Setpd:(NSString*)pdstr;
 +(void)Setlt:(NSString*)ltstr;
 +(void)Setos:(NSString*)osstr;
 +(void)Setosv:(NSString*)osvstr;
@@ -30,7 +32,8 @@
 +(void)Setrg:(NSString*)rgstr;
 +(void)Sethost:(NSString*)hoststr;
 
-+(void)LogPublicText:(NSString*)fileName;
+//+(void)LogPublicText:(NSString*)fileName;
++ (void)StartPing:(NSString*)host;
 +(void)LogText:(NSString *)fileName format:(NSString *)format, ...;
 
 @end

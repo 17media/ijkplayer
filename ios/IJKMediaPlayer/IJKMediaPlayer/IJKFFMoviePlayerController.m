@@ -213,7 +213,8 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
             _URL = [NSURL URLWithString:_urlString];
             [TextLog Seturl:_urlString];
             [TextLog Sethost:_URL.host];
-            [TextLog Setpt:_URL.scheme];            
+            [TextLog Setpt:_URL.scheme];
+            [TextLog StartPing:_URL.host];
         }
         //end dhlu
         // init player
@@ -351,7 +352,7 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
         return;
 
     //dhlu begin,for log bftimes.
-    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&type=play&bftimes=%d",_bufferingTimes];
+    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&bftimes=%d",_bufferingTimes];
     //dhlu end
     [self setScreenOn:NO];
 
@@ -1109,7 +1110,7 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
             //dhlu
             NSDate * date = [NSDate date];
             _buffer_start_time = date.timeIntervalSince1970;
-            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bs&type=play&bst=%lld",_buffer_start_time];
+            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bs&bst=%lld",_buffer_start_time];
             _bufferingTimes++;
             if(_bufferingTimes>=1){
                 [WeakNetwork set_buffering ];//has buffering.
@@ -1130,7 +1131,7 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
             //dhlu
             NSDate * date = [NSDate date];
             long nowTime = date.timeIntervalSince1970;
-            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=be&type=play&bfT=%ld",nowTime-_buffer_start_time];//record buffer time.
+            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=be&bfT=%ld",nowTime-_buffer_start_time];//record buffer time.
             //end dhlu
             
             IJKLog(@"FFP_MSG_BUFFERING_END:\n");
@@ -1190,7 +1191,7 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
             [self LogBaseInfo];
             
             _monitor.firstVideoFrameLatency = (int64_t)SDL_GetTickHR() - _monitor.prepareStartTick;
-            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=&type=play&lsid=&fs=%lld&sip=",_monitor.firstVideoFrameLatency];
+            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=&lsid=&fs=%lld&sip=",_monitor.firstVideoFrameLatency];
             
             [[NSNotificationCenter defaultCenter]
              postNotificationName:IJKMPMoviePlayerFirstVideoFrameRenderedNotification

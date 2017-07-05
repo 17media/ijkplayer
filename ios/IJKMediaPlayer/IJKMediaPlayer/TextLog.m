@@ -14,6 +14,8 @@
 static NSString *pt=@"";//scheme,protocal type.
 static NSString *mc=@"";//mac id
 static NSString *uid=@"";//User Id
+static NSString *sd=@"play";//stream direction
+static NSString *pd=@"";//provider
 static NSString *lt=@"";//Log type
 static NSString *os=@"";//os type
 static NSString *osv=@"";//Os version
@@ -28,9 +30,9 @@ static NSString *rg=@"";//computer region.
 static NSString *av17=@"";//app version 17media.
 static NSString *host=@"";
 static NSString *publicStr=@"";//app version 17media.
+static NSString *pingRtt=@"";//ping round trip interval.
+static NSString *pingloss=@"";//ping packet loss.
 
-
-static STDPingServices    *pingServices=NULL;
 
 @implementation TextLog : NSObject
 
@@ -44,6 +46,12 @@ static STDPingServices    *pingServices=NULL;
 }
 +(void)SetUid:(NSString*)id{
     uid = id;
+}
++(void)Setsd:(NSString*)sdstr{
+    sd = sdstr;
+}
++(void)Setpd:(NSString*)pdstr{
+    pd = pdstr;
 }
 +(void)Setlt:(NSString*)ltstr{
     lt = ltstr;
@@ -96,11 +104,13 @@ static STDPingServices    *pingServices=NULL;
     host = hoststr;
 }
 
-+ (void)_pingActionFired {
+//for ping.
+static STDPingServices    *pingServices=NULL;
++ (void)StartPing:(NSString*)host {
     
     NSLog(@"111pingstart...");
     
-    pingServices = [STDPingServices startPingAddress:@"www.baidu.com" sendnum:2 callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
+    pingServices = [STDPingServices startPingAddress:host sendnum:15 callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
         if (pingItem.status != STDPingStatusFinished) {
             //[weakSelf.textView appendText:pingItem.description];
             NSLog(@"%@",pingItem.description);
@@ -108,36 +118,35 @@ static STDPingServices    *pingServices=NULL;
             
             NSLog(@"%f",[STDPingItem getLossPercent]);
             NSLog(@"%li",[STDPingItem staticAvgRtridTime]);
-            //NSLog(@"%@",[STDPingItem statisticsWithPingItems:pingItems]);
-            /*
-             [weakSelf.textView appendText:[STDPingItem statisticsWithPingItems:pingItems]];
-             [button setTitle:@"Ping" forState:UIControlStateNormal];
-             button.tag = 10001;
-             weakSelf.pingServices = nil;
-             */
+            
+            pingloss = [NSString stringWithFormat:@"%f",[STDPingItem getLossPercent]];
+            pingRtt = [NSString stringWithFormat:@"%li",[STDPingItem staticAvgRtridTime]];
+            
+            [TextLog LogText:LOG_FILE_NAME format:@"lt=pv&prtt=%@&plss=%@",pingRtt,pingloss];
+            int k=0;
         }
     }];
 }
 
-+(void)LogPublicText:(NSString*)fileName{
-    
-    //[TextLog _pingActionFired];
-    
-    NSString *time = [TextLog GetTimeStr];
-    
-    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&lngt=%@&ltt=%@&mip=%@&rg=%@&av17=%@&\r\n",
-                 time,mc,uid,lt,os,osv,mod,carrier,nt,lngt,ltt,mip,rg,av17];
-    
-    [TextLog writefile:publicStr fn:fileName];
-}
+//+(void)LogPublicText:(NSString*)fileName{
+//    
+//    //[TextLog _pingActionFired];
+//    
+//    NSString *time = [TextLog GetTimeStr];
+//    
+//    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&pd=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&lngt=%@&ltt=%@&mip=%@&rg=%@&av17=%@&\r\n",
+//                 time,mc,uid,pd,lt,os,osv,mod,carrier,nt,lngt,ltt,mip,rg,av17];
+//    
+//    [TextLog writefile:publicStr fn:fileName];
+//}
 
 
 + (NSString*)GetPublicText{
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
-                 time,mc,uid,lt,os,osv,mod,carrier,nt,mip,rg,av17,pt,host,url];
+    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&sd=%@&pd=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
+                 time,mc,uid,sd,pd,lt,os,osv,mod,carrier,nt,mip,rg,av17,pt,host,url];
     //    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&lngt=%@&ltt=%@&mip=%@&rg=%@&av17=%@&",
     //                 time,mc,uid,lt,os,osv,mod,carrier,nt,lngt,ltt,mip,rg,av17];
     

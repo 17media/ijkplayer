@@ -67,7 +67,7 @@ static int curBuffering=0;
         startTime = nowTime;
         transbytes = 0;
         //record once  per 10s
-        [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=ps&type=play&speed=%ld&sip=",speed];
+        [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=ps&speed=%ld&sip=",speed];
         int64_t bt = monitor.bitrate/1000;
         if(0!=monitor.bitrate && speed < (0.8 * bt) ){
             //mp->ffplayer->packet_buffering = 1;
