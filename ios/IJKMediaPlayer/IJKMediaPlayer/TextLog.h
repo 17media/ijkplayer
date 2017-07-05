@@ -32,7 +32,6 @@
 +(void)Setrg:(NSString*)rgstr;
 +(void)Sethost:(NSString*)hoststr;
 
-//+(void)LogPublicText:(NSString*)fileName;
 + (void)StartPing:(NSString*)host;
 +(void)LogText:(NSString *)fileName format:(NSString *)format, ...;
 
