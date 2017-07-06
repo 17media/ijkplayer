@@ -100,7 +100,7 @@ static NSString *pingloss=@"";//ping packet loss.
 }
 
 +(void)Sethost:(NSString*)hoststr{
-    host = hoststr;
+    host = [[NSString alloc] initWithString:hoststr];
 }
 
 //for ping.
