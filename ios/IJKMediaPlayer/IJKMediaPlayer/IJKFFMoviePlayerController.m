@@ -20,6 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+
 #import "IJKFFMoviePlayerController.h"
 
 #import <UIKit/UIKit.h>
@@ -40,10 +41,13 @@
 #include "ijkplayer.h"
 #include "ijkplayer_internal.h"
 //end dhlu
-
+#import "NSString+IJKMedia.h"
 
 static const char *kIJKFFRequiredFFmpegVersion = "ff3.1--ijk0.6.1--20160824--001";
-
+//dhlu begin
+static bool need_ping_ip;
+static NSString* ip;
+//end dhlu
 typedef uint64_t (^VideoSyncTimestampCallback)(uint64_t timestamp);
 typedef void(^VideoSyncFinishCallback)(uint64_t timestamp);
 
@@ -85,8 +89,9 @@ typedef void(^VideoSyncFinishCallback)(uint64_t timestamp);
     
     NSURL *_streamURL;
     //dhlu
-    NSURL *_URL;//for log.
-    long _buffer_start_time;
+    NSURL *_URL;//for log.    
+    int64_t play_start_time;
+    int64_t buffer_start_time;
     int  _bufferingTimes;//don't count the first one buffring.
     //end dhlu
 }
@@ -179,10 +184,19 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
     return [self initWithContentURLString:aUrlString
                               withOptions:options];
 }
+//dhu,must add this function for nsstring+ijkmedia.m category.
+//other method,add -objc,etc,can't work.when use Nsstring+IJkmedia.m
+__attribute__((used)) static void importIJKMedia ()
+{
+    import_NSString_IJKMedia();
+    // add more import calls here
+}
+//end
 
 - (id)initWithContentURLString:(NSString *)aUrlString
                    withOptions:(IJKFFOptions *)options
 {
+
     if (aUrlString == nil)
         return nil;
 
@@ -209,12 +223,24 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
         // init media resource
         _urlString = aUrlString;
         //dhlu
+        NSDate * date = [NSDate date];
+        play_start_time = date.timeIntervalSince1970;
+        
         if (!_streamURL) {
             _URL = [NSURL URLWithString:_urlString];
             [TextLog Seturl:_urlString];
             [TextLog Sethost:_URL.host];
             [TextLog Setpt:_URL.scheme];
-            [TextLog StartPing:_URL.host];
+            
+            //NSString* str = [[NSString alloc] initWithString:_URL.host];
+            bool k = [_URL.host ijk_isIpv4];
+            
+            if(true == k) {//host is not ip now.
+                [TextLog StartPing:_URL.host];
+                need_ping_ip = false;
+            }else{//need ping again. when get ip.
+                need_ping_ip = true;
+            }
         }
         //end dhlu
         // init player
@@ -352,7 +378,9 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
         return;
 
     //dhlu begin,for log bftimes.
-    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&bftimes=%d",_bufferingTimes];
+    NSDate * date = [NSDate date];
+    int64_t play_end_time = date.timeIntervalSince1970;
+    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&pst=%lld&psd=%lld&num=%d",play_start_time,play_end_time,_bufferingTimes];
     //dhlu end
     [self setScreenOn:NO];
 
@@ -1109,8 +1137,8 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
         case FFP_MSG_BUFFERING_START: {
             //dhlu
             NSDate * date = [NSDate date];
-            _buffer_start_time = date.timeIntervalSince1970;
-            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bs&bst=%lld",_buffer_start_time];
+            buffer_start_time = date.timeIntervalSince1970;
+            //[TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bs&bst=%lld",buffer_start_time];
             _bufferingTimes++;
             if(_bufferingTimes>=1){
                 [WeakNetwork set_buffering ];//has buffering.
@@ -1130,8 +1158,8 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
         case FFP_MSG_BUFFERING_END: {
             //dhlu
             NSDate * date = [NSDate date];
-            long nowTime = date.timeIntervalSince1970;
-            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=be&bfT=%ld",nowTime-_buffer_start_time];//record buffer time.
+            int64_t endTime = date.timeIntervalSince1970;
+            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&bt=%lld&bd=%lld&bi=%lld",buffer_start_time,endTime,endTime-buffer_start_time];//record buffer time.
             //end dhlu
             
             IJKLog(@"FFP_MSG_BUFFERING_END:\n");
@@ -1185,13 +1213,15 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
         }
         case FFP_MSG_VIDEO_RENDERING_START: {
             //dhlu
-            //_mediaPlayer->ffplayer->packet_buffering = 1;
+            if(true == need_ping_ip){
+                [TextLog StartPing:ip];
+            }
             //end dhlu.
             IJKLog(@"FFP_MSG_VIDEO_RENDERING_START:\n");
             [self LogBaseInfo];
             
             _monitor.firstVideoFrameLatency = (int64_t)SDL_GetTickHR() - _monitor.prepareStartTick;
-            [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=&lsid=&fs=%lld&sip=",_monitor.firstVideoFrameLatency];
+            [TextLog LogText:LOG_FILE_NAME format:@"lt=fs&lsid=&fs=%lld",_monitor.firstVideoFrameLatency];
             
             [[NSNotificationCenter defaultCenter]
              postNotificationName:IJKMPMoviePlayerFirstVideoFrameRenderedNotification
@@ -1221,8 +1251,8 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
     //set some base info
     
     int64_t bps = ijkmp_read_total_bytes(_mediaPlayer) * 8;
-    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bsi&type=play&lsid=%@&sip=%@&pt=%@&url=%@&bps=%lld",
-     _liveId,_streamURL.host,_commentProtocol,_urlString,bps];
+    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bsi&pt=%@&url=%@&bps=%lld",
+     _URL.scheme,_URL,bps];
 }
 - (IJKFFMoviePlayerMessage *) obtainMessage {
     return [_msgPool obtain];
@@ -1303,14 +1333,23 @@ static int onInjectTcpIOControl(IJKFFMoviePlayerController *mpc, id<IJKMediaUrlO
     AVAppTcpIOControl *realData = data;
     assert(realData);
     assert(sizeof(AVAppTcpIOControl) == data_size);
-
+    
     switch (type) {
         case IJKMediaCtrl_WillTcpOpen:
-
             break;
         case IJKMediaCtrl_DidTcpOpen:
             mpc->_monitor.tcpError = realData->error;
             mpc->_monitor.remoteIp = [NSString stringWithUTF8String:realData->ip];
+            //dhlu record ip
+            [TextLog Sethost:mpc->_monitor.remoteIp];
+            if(mpc->_monitor.remoteIp.length>0){
+                ip = [[NSString alloc] initWithString:mpc->_monitor.remoteIp];
+            }
+            //I don't know why we can't ping here.
+//            if(true == need_ping_ip){
+//                [TextLog StartPing:ip];
+//            }
+            //dhlu end
             [mpc->_glView setHudValue: mpc->_monitor.remoteIp forKey:@"ip"];
             break;
         default:

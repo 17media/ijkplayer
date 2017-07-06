@@ -42,3 +42,5 @@
 }
 
 @end
+
+void import_NSString_IJKMedia ( ){}

@@ -23,9 +23,9 @@
 +(void)Setos:(NSString*)osstr;
 +(void)Setosv:(NSString*)osvstr;
 +(void)Setmod:(NSString*)modstr;
-+(void)Setcarrier:(NSString*)carrierstr;
++(void)Setcr:(NSString*)crstr;
 +(void)Setnt:(NSString*)ntstr;
-+(void)Setlngt:(NSString*)lngtstr;
++(void)Setlnt:(NSString*)lntstr;
 +(void)Setltt:(NSString*)lttstr;
 +(void)Setmip:(NSString*)mipstr;
 +(void)Seturl:(NSString*)urlstr;

@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface NSString (IJKMedia)
 
 + (NSString *) ijk_stringBeEmptyIfNil:(NSString *)src;
@@ -29,3 +30,5 @@
 - (BOOL) ijk_isIpv4;
 
 @end
+
+void import_NSString_IJKMedia ( );

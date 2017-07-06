@@ -31,6 +31,8 @@
 		9A4D5ACA1EFBABDE008313E3 /* TextLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4D5AC61EFBABDE008313E3 /* TextLog.m */; };
 		9A4D5ACD1EFBBA70008313E3 /* WeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A4D5ACB1EFBBA70008313E3 /* WeakNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A4D5AD31EFBBB8B008313E3 /* WeakNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4D5ACC1EFBBA70008313E3 /* WeakNetwork.m */; };
+		9AABA36E1F0E43EF00285B8F /* NSString+IJKMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AABA36D1F0E43EF00285B8F /* NSString+IJKMedia.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9AABA3701F0E43F600285B8F /* NSString+IJKMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AABA36F1F0E43F600285B8F /* NSString+IJKMedia.m */; };
 		E607FFE11B7B62E3005F11A6 /* IJKDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E607FFDF1B7B60F9005F11A6 /* IJKDeviceModel.m */; };
 		E653C6F61BCE5A750016835A /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6EF1BCE5A750016835A /* libavcodec.a */; };
 		E653C6F81BCE5A750016835A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6F01BCE5A750016835A /* libavfilter.a */; };
@@ -94,8 +96,6 @@
 		E68B7AC61C1E7F20001DE241 /* IJKSDLHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E68B7AC41C1E7F20001DE241 /* IJKSDLHudViewController.m */; };
 		E68B7ACF1C1E97B0001DE241 /* IJKSDLHudViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E68B7ACD1C1E97B0001DE241 /* IJKSDLHudViewCell.h */; };
 		E68B7AD01C1E97B0001DE241 /* IJKSDLHudViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E68B7ACE1C1E97B0001DE241 /* IJKSDLHudViewCell.m */; };
-		E698089B1C7EB13A0048A46C /* NSString+IJKMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = E69808991C7EB13A0048A46C /* NSString+IJKMedia.h */; };
-		E698089C1C7EB13A0048A46C /* NSString+IJKMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = E698089A1C7EB13A0048A46C /* NSString+IJKMedia.m */; };
 		E69808A01C7EB2040048A46C /* IJKNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E698089E1C7EB2040048A46C /* IJKNotificationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E69808A11C7EB2040048A46C /* IJKNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E698089F1C7EB2040048A46C /* IJKNotificationManager.m */; };
 		E69BE5511B93FED300AFBA3F /* allformats.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE54A1B93FED300AFBA3F /* allformats.c */; };
@@ -168,6 +168,8 @@
 		9A4D5AC61EFBABDE008313E3 /* TextLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLog.m; sourceTree = "<group>"; };
 		9A4D5ACB1EFBBA70008313E3 /* WeakNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeakNetwork.h; sourceTree = "<group>"; };
 		9A4D5ACC1EFBBA70008313E3 /* WeakNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeakNetwork.m; sourceTree = "<group>"; };
+		9AABA36D1F0E43EF00285B8F /* NSString+IJKMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+IJKMedia.h"; path = "IJKMediaPlayer/NSString+IJKMedia.h"; sourceTree = "<group>"; };
+		9AABA36F1F0E43F600285B8F /* NSString+IJKMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+IJKMedia.m"; path = "IJKMediaPlayer/NSString+IJKMedia.m"; sourceTree = "<group>"; };
 		BE51DC4F1D868E1700B9F5D5 /* IJKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = IJKLog.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		E607FFDE1B7B60F9005F11A6 /* IJKDeviceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IJKDeviceModel.h; path = IJKMediaPlayer/IJKDeviceModel.h; sourceTree = "<group>"; };
 		E607FFDF1B7B60F9005F11A6 /* IJKDeviceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IJKDeviceModel.m; path = IJKMediaPlayer/IJKDeviceModel.m; sourceTree = "<group>"; };
@@ -261,8 +263,6 @@
 		E690401117EAFC6100CFD954 /* ijksdl_vout.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ijksdl_vout.c; sourceTree = "<group>"; };
 		E690401217EAFC6100CFD954 /* ijksdl_vout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ijksdl_vout.h; sourceTree = "<group>"; };
 		E690401317EAFC6100CFD954 /* ijksdl_vout_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ijksdl_vout_internal.h; sourceTree = "<group>"; };
-		E69808991C7EB13A0048A46C /* NSString+IJKMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+IJKMedia.h"; path = "IJKMediaPlayer/NSString+IJKMedia.h"; sourceTree = "<group>"; };
-		E698089A1C7EB13A0048A46C /* NSString+IJKMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+IJKMedia.m"; path = "IJKMediaPlayer/NSString+IJKMedia.m"; sourceTree = "<group>"; };
 		E698089E1C7EB2040048A46C /* IJKNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IJKNotificationManager.h; path = IJKMediaPlayer/IJKNotificationManager.h; sourceTree = "<group>"; };
 		E698089F1C7EB2040048A46C /* IJKNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IJKNotificationManager.m; path = IJKMediaPlayer/IJKNotificationManager.m; sourceTree = "<group>"; };
 		E69BE54A1B93FED300AFBA3F /* allformats.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = allformats.c; sourceTree = "<group>"; };
@@ -754,9 +754,9 @@
 				E6716E4A1807E5FC00B3FBC1 /* IJKMediaUtils.m */,
 				E698089E1C7EB2040048A46C /* IJKNotificationManager.h */,
 				E698089F1C7EB2040048A46C /* IJKNotificationManager.m */,
-				E69808991C7EB13A0048A46C /* NSString+IJKMedia.h */,
-				E698089A1C7EB13A0048A46C /* NSString+IJKMedia.m */,
 				BE51DC4F1D868E1700B9F5D5 /* IJKLog.h */,
+				9AABA36D1F0E43EF00285B8F /* NSString+IJKMedia.h */,
+				9AABA36F1F0E43F600285B8F /* NSString+IJKMedia.m */,
 			);
 			name = IJKMediaPlayer;
 			sourceTree = "<group>";
@@ -768,6 +768,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AABA36E1F0E43EF00285B8F /* NSString+IJKMedia.h in Headers */,
 				9A4D5AC91EFBABDE008313E3 /* TextLog.h in Headers */,
 				9A4D5ACD1EFBBA70008313E3 /* WeakNetwork.h in Headers */,
 				E6DBD3891C8941EB0058E4FB /* IJKFFMonitor.h in Headers */,
@@ -789,7 +790,6 @@
 				E654EAE91B6B295200B0F2D0 /* IJKMPMoviePlayerController.h in Headers */,
 				54A029B71D4700E6001C61C1 /* ijkavformat.h in Headers */,
 				E68B7ACF1C1E97B0001DE241 /* IJKSDLHudViewCell.h in Headers */,
-				E698089B1C7EB13A0048A46C /* NSString+IJKMedia.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,6 +944,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AABA3701F0E43F600285B8F /* NSString+IJKMedia.m in Sources */,
 				9A4D5AD31EFBBB8B008313E3 /* WeakNetwork.m in Sources */,
 				9A4D5ACA1EFBABDE008313E3 /* TextLog.m in Sources */,
 				E654EAA71B6B283700B0F2D0 /* IJKKVOController.m in Sources */,
@@ -978,7 +979,6 @@
 				E654EAB01B6B285900B0F2D0 /* ff_ffpipeline.c in Sources */,
 				E654EACC1B6B288A00B0F2D0 /* IJKSDLAudioKit.m in Sources */,
 				E6C4599B1C7030B6004831EC /* mvp.vsh.c in Sources */,
-				E698089C1C7EB13A0048A46C /* NSString+IJKMedia.m in Sources */,
 				E654EABF1B6B287600B0F2D0 /* ijksdl_vout_overlay_ffmpeg.c in Sources */,
 				E654EAC31B6B287E00B0F2D0 /* ijksdl_mutex.c in Sources */,
 				E654EACD1B6B288A00B0F2D0 /* IJKSDLAudioQueueController.m in Sources */,
@@ -1101,6 +1101,7 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "tv.danmaku.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1149,6 +1150,7 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "tv.danmaku.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1255,6 +1257,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1285,6 +1288,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;

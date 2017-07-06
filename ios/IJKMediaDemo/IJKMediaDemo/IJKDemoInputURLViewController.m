@@ -43,7 +43,7 @@
     //recevie log notification.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NotificationFromIJK:) name:@"NotificationFromIJK_Log" object:nil];
     //end.
-}
+  }
 
 - (void) NotificationFromIJK:(NSNotification *)notification{
     

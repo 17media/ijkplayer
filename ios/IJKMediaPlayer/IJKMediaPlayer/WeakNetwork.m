@@ -30,11 +30,11 @@ static int curBuffering=0;
 //end adjust variables.
 @implementation WeakNetwork : NSObject
 
-+ (void)_pingActionFired {
++ (void)StartPing:(NSString*)host {
     
     NSLog(@"pingstart...");
     
-    pingServices = [STDPingServices startPingAddress:@"www.baidu.com" sendnum:10 callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
+    pingServices = [STDPingServices startPingAddress:host sendnum:15 callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
         if (pingItem.status != STDPingStatusFinished) {
             //[weakSelf.textView appendText:pingItem.description];
             //NSLog(@"%@",pingItem.description);
@@ -67,7 +67,7 @@ static int curBuffering=0;
         startTime = nowTime;
         transbytes = 0;
         //record once  per 10s
-        [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=ps&speed=%ld&sip=",speed];
+        [TextLog LogText:LOG_FILE_NAME format:@"lt=ps&spd=%ld",speed];
         int64_t bt = monitor.bitrate/1000;
         if(0!=monitor.bitrate && speed < (0.8 * bt) ){
             //mp->ffplayer->packet_buffering = 1;
@@ -97,7 +97,8 @@ static int curBuffering=0;
 //        [WeakNetwork _pingActionFired];
 //    }
     if( 20 == checkTimes ){
-        
+        //record speed
+        [TextLog LogText:LOG_FILE_NAME format:@"lt=sp&spd=%lld",curAvspeed];
         //curAvspeed,curAvRtt,curPingLoss,curBuffering,
         //1,3,5,7.
         if( 0==curBuffering && (curAvspeed > 1.1*bitrate && bitrate!=0)) {//use the littlest buffer.

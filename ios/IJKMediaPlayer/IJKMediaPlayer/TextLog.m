@@ -10,19 +10,18 @@
 #import "TextLog.h"
 #import "STDPingServices.h"
 
-
 static NSString *pt=@"";//scheme,protocal type.
 static NSString *mc=@"";//mac id
 static NSString *uid=@"";//User Id
 static NSString *sd=@"play";//stream direction
-static NSString *pd=@"";//provider
+static NSString *pd=@"wansu";//provider
 static NSString *lt=@"";//Log type
 static NSString *os=@"";//os type
 static NSString *osv=@"";//Os version
 static NSString *mod=@"";// phone model
-static NSString *carrier=@"";
+static NSString *cr=@"中华电信";
 static NSString *nt=@"";//net type
-static NSString *lngt=@"";
+static NSString *lnt=@"";
 static NSString *ltt=@"";
 static NSString *mip=@"";//my public ip.
 static NSString *url=@"";//url
@@ -70,8 +69,8 @@ static NSString *pingloss=@"";//ping packet loss.
 }
 
 
-+(void)Setcarrier:(NSString*)carrierstr{
-    carrier = carrier;
++(void)Setcr:(NSString*)crstr{
+    cr = cr;
 }
 
 
@@ -79,8 +78,8 @@ static NSString *pingloss=@"";//ping packet loss.
     nt = ntstr;
 }
 
-+(void)Setlngt:(NSString*)lngtstr{
-    lngt = lngtstr;
++(void)Setlnt:(NSString*)lntstr{
+    lnt = lntstr;
 }
 
 +(void)Setltt:(NSString*)lttstr{
@@ -133,8 +132,8 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"time=%@&mc=%@&uid=%@&sd=%@&pd=%@&lt=%@&os=%@&osv=%@&mod=%@&carrier=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
-                 time,mc,uid,sd,pd,lt,os,osv,mod,carrier,nt,mip,rg,av17,pt,host,url];
+    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&sd=%@&pd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
+                 time,mc,uid,sd,pd,os,osv,mod,cr,nt,mip,rg,av17,pt,host,url];
     return  publicStr;
 }
 
@@ -176,7 +175,7 @@ static STDPingServices    *pingServices=NULL;
     [fileHandle closeFile];
 }
 
-//fromat:  "lt=www&" "log=www&"
+//format:  "lt=www&" "log=www&"
 +(void)LogText:(NSString *)fileName format:(NSString *)format, ...{
     va_list args;
     va_start(args, format);
