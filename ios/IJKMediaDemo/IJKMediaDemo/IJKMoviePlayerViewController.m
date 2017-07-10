@@ -92,8 +92,8 @@
     [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"];
     [options setFormatOptionValue:@"audio" forKey:@"sync"];
     [options setPlayerOptionIntValue:1 forKey:@"videotoolbox-handle-resolution-change"];
-    [options setPlayerOptionIntValue:5 forKey:@"min-frames"];
-    [options setPlayerOptionIntValue:1 forKey:@"packet-buffering"];//first should be no buffer.open it after rendering.
+    //[options setPlayerOptionIntValue:15 forKey:@"min-frames"];
+    [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];
     [options setFormatOptionIntValue:0 forKey:@"analyzeduration"];
     [options setFormatOptionIntValue:1 forKey:@"fpsprobesize"];
     //end dhlu
@@ -156,6 +156,9 @@
 
 - (IBAction)onClickDone:(id)sender
 {
+    //begin,dhlu
+    [self.player stop];
+    //end dhlu
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -380,7 +380,7 @@ __attribute__((used)) static void importIJKMedia ()
     //dhlu begin,for log bftimes.
     NSDate * date = [NSDate date];
     int64_t play_end_time = date.timeIntervalSince1970;
-    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&pst=%lld&psd=%lld&num=%d",play_start_time,play_end_time,_bufferingTimes];
+    [TextLog LogText:LOG_FILE_NAME format:@"pd=&lt=bft&pst=%lld&psd=%lld&interval=%lld&num=%d",play_start_time,play_end_time,(play_end_time - play_start_time),_bufferingTimes];
     //dhlu end
     [self setScreenOn:NO];
 
@@ -1216,6 +1216,8 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
             if(true == need_ping_ip){
                 [TextLog StartPing:ip];
             }
+            //use buffer agian.
+            _mediaPlayer->ffplayer->packet_buffering = 1;
             //end dhlu.
             IJKLog(@"FFP_MSG_VIDEO_RENDERING_START:\n");
             [self LogBaseInfo];

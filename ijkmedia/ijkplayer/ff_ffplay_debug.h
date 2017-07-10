@@ -35,10 +35,10 @@
 // #define FFP_SHOW_DEMUX_CACHE
 // #define FFP_SHOW_BUF_POS
 // #define FFP_SHOW_PKT_RECYCLE
-
+//dhlu
  #define FFP_NOTIFY_BUF_TIME
  #define FFP_NOTIFY_BUF_BYTES
-
+//end dhlu
 // #define FFP_SHOW_VTB_IN_DECODING
 // #define FFP_VTB_DISABLE_OUTPUT
 

@@ -96,7 +96,9 @@ static int curBuffering=0;
 //        //check ping result.
 //        [WeakNetwork _pingActionFired];
 //    }
-    if( 20 == checkTimes ){
+//    mp->ffplayer->dcc.current_high_water_mark_in_ms = 7000;
+//    return;
+    if( 7 == checkTimes ){
         //record speed
         [TextLog LogText:LOG_FILE_NAME format:@"lt=sp&spd=%lld",curAvspeed];
         //curAvspeed,curAvRtt,curPingLoss,curBuffering,
@@ -106,7 +108,7 @@ static int curBuffering=0;
             mp->ffplayer->dcc.current_high_water_mark_in_ms = 1000;
         }
         if(1 == curBuffering || (curAvspeed < bitrate && bitrate!=0)){//if has buffering,must increase.
-            mp->ffplayer->dcc.current_high_water_mark_in_ms += 2000;
+            mp->ffplayer->dcc.current_high_water_mark_in_ms += 3000;
             if(mp->ffplayer->dcc.current_high_water_mark_in_ms >7000) mp->ffplayer->dcc.current_high_water_mark_in_ms = 7;
         }
         if(0 == curBuffering &&( (curAvspeed > 1.2*bitrate && bitrate!=0 )) ){
