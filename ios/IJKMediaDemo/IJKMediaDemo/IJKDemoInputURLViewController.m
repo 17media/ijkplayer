@@ -44,7 +44,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NotificationFromIJK:) name:@"NotificationFromIJK_Log" object:nil];
     //end.
   }
-
+//dhlu
 - (void) NotificationFromIJK:(NSNotification *)notification{
     
     if ([[notification name] isEqualToString:@"NotificationFromIJK_Log"]){
@@ -52,6 +52,7 @@
         int k=0;
     }
 }
+//end dhlu.
 
 - (void)onClickPlayButton {
     //

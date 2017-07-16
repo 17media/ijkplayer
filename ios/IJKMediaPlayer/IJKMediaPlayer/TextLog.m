@@ -16,6 +16,7 @@ static NSString *uid=@"";//User Id
 static NSString *sd=@"play";//stream direction
 static NSString *pd=@"wansu";//provider
 static NSString *lt=@"";//Log type
+static NSString *imd=@"";//iphone model
 static NSString *os=@"";//os type
 static NSString *osv=@"";//Os version
 static NSString *mod=@"";// phone model
@@ -56,6 +57,10 @@ static NSString *pingloss=@"";//ping packet loss.
     lt = ltstr;
 }
 
+
++(void)Setimd:(NSString*)imdstr{
+    imd = imdstr;
+}
 +(void)Setos:(NSString*)osstr{
     os = osstr;
 }
@@ -132,8 +137,8 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&sd=%@&pd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
-                 time,mc,uid,sd,pd,os,osv,mod,cr,nt,mip,rg,av17,pt,host,url];
+    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
+                 time,mc,uid,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,mip,rg,av17,pt,host,url];
     return  publicStr;
 }
 

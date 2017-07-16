@@ -40,6 +40,8 @@
 #include "TextLog.h"
 #include "ijkplayer.h"
 #include "ijkplayer_internal.h"
+#import "MoLocationManager.h"
+#import <sys/utsname.h>
 //end dhlu
 #import "NSString+IJKMedia.h"
 
@@ -169,12 +171,54 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
     ijkmp_io_stat_complete_register(cb);
 }
 
+
+-(void)GetDeviceInfo{
+    //NSString *strName = [[UIDevice currentDevice] name]; // Name of the phone as named by user------设备模式
+    NSString *strSysName = [[UIDevice currentDevice] systemName]; // "iPhone OS" //系统名称
+    NSString *strSysVersion = [[UIDevice currentDevice] systemVersion]; // "2.2.1” //系统版本号
+    //NSString *strModel = [[UIDevice currentDevice] model]; // "iPhone" on both devices
+    //NSString *strLocModel = [[UIDevice currentDevice] localizedModel]; // "iPhone" on both devices
+    //float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];
+    
+    [TextLog Setimd:platform];
+    [TextLog Setos:strSysName];
+    [TextLog Setosv:strSysVersion];
+}
+
+-(void)Getgps{
+    //只获取一次
+    __block  BOOL isOnece = YES;
+    [MoLocationManager getMoLocationWithSuccess:^(double lat, double lng){
+        isOnece = NO;
+        //只打印一次经纬度
+        NSLog(@"lat lng (%f, %f)", lat, lng);
+        NSString *lngstr =  [NSString stringWithFormat:@"%f",lng];
+        NSString *latstr =  [NSString stringWithFormat:@"%f",lat];
+        [TextLog Setlnt:lngstr];
+        [TextLog Setltt:latstr];
+        if (!isOnece) {
+            [MoLocationManager stop];
+        }
+    } Failure:^(NSError *error){
+        isOnece = NO;
+        NSLog(@"error = %@", error);
+        if (!isOnece) {
+            [MoLocationManager stop];
+        }
+    }];
+}
+
 - (id)initWithContentURL:(NSURL *)aUrl
              withOptions:(IJKFFOptions *)options
 {
     if (aUrl == nil)
         return nil;
     //dhlu begin,debug inpul enter.
+    [self GetDeviceInfo];
+    [self Getgps];
     [self startWeaknetTimer];
     _bufferingTimes = -1;
     //dhlu end

@@ -20,6 +20,7 @@
 +(void)Setsd:(NSString*)sdstr;
 +(void)Setpd:(NSString*)pdstr;
 +(void)Setlt:(NSString*)ltstr;
++(void)Setimd:(NSString*)imdstr;
 +(void)Setos:(NSString*)osstr;
 +(void)Setosv:(NSString*)osvstr;
 +(void)Setmod:(NSString*)modstr;

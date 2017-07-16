@@ -26,6 +26,8 @@
 		54A029B81D4700E6001C61C1 /* ijklongurl.c in Sources */ = {isa = PBXBuildFile; fileRef = 54A029B31D4700E6001C61C1 /* ijklongurl.c */; };
 		54A029B91D4700E6001C61C1 /* ijksegment.c in Sources */ = {isa = PBXBuildFile; fileRef = 54A029B41D4700E6001C61C1 /* ijksegment.c */; };
 		54A029BA1D4700E6001C61C1 /* ijkurlhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 54A029B51D4700E6001C61C1 /* ijkurlhook.c */; };
+		9A326E201F1B85A7000BC054 /* MoLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A326E1E1F1B85A7000BC054 /* MoLocationManager.h */; };
+		9A326E211F1B85A7000BC054 /* MoLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A326E1F1F1B85A7000BC054 /* MoLocationManager.m */; };
 		9A4D5ABD1EFB9B70008313E3 /* ping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4D5AB41EFB9AAB008313E3 /* ping.framework */; };
 		9A4D5AC91EFBABDE008313E3 /* TextLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A4D5AC51EFBABDE008313E3 /* TextLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A4D5ACA1EFBABDE008313E3 /* TextLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4D5AC61EFBABDE008313E3 /* TextLog.m */; };
@@ -163,6 +165,8 @@
 		54A029B31D4700E6001C61C1 /* ijklongurl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ijklongurl.c; sourceTree = "<group>"; };
 		54A029B41D4700E6001C61C1 /* ijksegment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ijksegment.c; sourceTree = "<group>"; };
 		54A029B51D4700E6001C61C1 /* ijkurlhook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ijkurlhook.c; sourceTree = "<group>"; };
+		9A326E1E1F1B85A7000BC054 /* MoLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoLocationManager.h; sourceTree = "<group>"; };
+		9A326E1F1F1B85A7000BC054 /* MoLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoLocationManager.m; sourceTree = "<group>"; };
 		9A4D5AAF1EFB9AAB008313E3 /* ping.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ping.xcodeproj; path = ../ping/ping.xcodeproj; sourceTree = "<group>"; };
 		9A4D5AC51EFBABDE008313E3 /* TextLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLog.h; sourceTree = "<group>"; };
 		9A4D5AC61EFBABDE008313E3 /* TextLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLog.m; sourceTree = "<group>"; };
@@ -494,6 +498,8 @@
 		E6903EBE17EAF6C500CFD954 /* IJKFFMoviePlayerController */ = {
 			isa = PBXGroup;
 			children = (
+				9A326E1E1F1B85A7000BC054 /* MoLocationManager.h */,
+				9A326E1F1F1B85A7000BC054 /* MoLocationManager.m */,
 				9A4D5ACB1EFBBA70008313E3 /* WeakNetwork.h */,
 				9A4D5ACC1EFBBA70008313E3 /* WeakNetwork.m */,
 				9A4D5AC51EFBABDE008313E3 /* TextLog.h */,
@@ -774,6 +780,7 @@
 				E6DBD3891C8941EB0058E4FB /* IJKFFMonitor.h in Headers */,
 				E654EAEA1B6B295200B0F2D0 /* IJKFFMoviePlayerController.h in Headers */,
 				E68B7AC51C1E7F20001DE241 /* IJKSDLHudViewController.h in Headers */,
+				9A326E201F1B85A7000BC054 /* MoLocationManager.h in Headers */,
 				E654EAEC1B6B295200B0F2D0 /* IJKFFOptions.h in Headers */,
 				E654EAE81B6B295200B0F2D0 /* IJKAVMoviePlayerController.h in Headers */,
 				E6C459841C7030AA004831EC /* ijksdl_gles2.h in Headers */,
@@ -998,6 +1005,7 @@
 				E6C459971C7030B6004831EC /* renderer.c in Sources */,
 				E654EAB41B6B285900B0F2D0 /* ijkplayer.c in Sources */,
 				E654EAAE1B6B284C00B0F2D0 /* IJKFFOptions.m in Sources */,
+				9A326E211F1B85A7000BC054 /* MoLocationManager.m in Sources */,
 				E654EACE1B6B288A00B0F2D0 /* IJKSDLAudioUnitController.m in Sources */,
 				E6DBD38A1C8941EB0058E4FB /* IJKFFMonitor.m in Sources */,
 				E654EAAB1B6B284C00B0F2D0 /* IJKFFMoviePlayerController.m in Sources */,
