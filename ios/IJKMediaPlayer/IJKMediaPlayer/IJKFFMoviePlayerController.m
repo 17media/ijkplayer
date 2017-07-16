@@ -42,6 +42,8 @@
 #include "ijkplayer_internal.h"
 #import "MoLocationManager.h"
 #import <sys/utsname.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 //end dhlu
 #import "NSString+IJKMedia.h"
 
@@ -171,6 +173,34 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
     ijkmp_io_stat_complete_register(cb);
 }
 
+//dhlu
+-(void)GetCarried{
+    //获取本机运营商名称
+    
+    CTTelephonyNetworkInfo *info = [[CTTelephonyNetworkInfo alloc] init];
+    
+    CTCarrier *carrier = [info subscriberCellularProvider];
+    
+    //当前手机所属运营商名称
+    
+    NSString *mobile;
+    
+    //先判断有没有SIM卡，如果没有则不获取本机运营商
+    
+    if (!carrier.isoCountryCode) {
+        
+        NSLog(@"没有SIM卡");
+        
+        mobile = @"无运营商";
+        
+    }else{
+        
+        mobile = [carrier carrierName];
+        
+    }
+    [TextLog Setcr:mobile];
+
+}
 
 -(void)GetDeviceInfo{
     //NSString *strName = [[UIDevice currentDevice] name]; // Name of the phone as named by user------设备模式
@@ -210,13 +240,14 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
         }
     }];
 }
-
+//end dhlu
 - (id)initWithContentURL:(NSURL *)aUrl
              withOptions:(IJKFFOptions *)options
 {
     if (aUrl == nil)
         return nil;
     //dhlu begin,debug inpul enter.
+    [self GetCarried];
     [self GetDeviceInfo];
     [self Getgps];
     [self startWeaknetTimer];
