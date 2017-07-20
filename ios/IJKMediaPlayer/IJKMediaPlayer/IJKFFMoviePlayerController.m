@@ -97,6 +97,7 @@ typedef void(^VideoSyncFinishCallback)(uint64_t timestamp);
     int64_t play_start_time;
     int64_t buffer_start_time;
     int  _bufferingTimes;//don't count the first one buffring.
+    int real_bitrate;
     //end dhlu
 }
 
@@ -252,6 +253,7 @@ void IJKFFIOStatCompleteRegister(void (*cb)(const char *url,
     [self Getgps];
     [self startWeaknetTimer];
     _bufferingTimes = -1;
+    real_bitrate = 0;
     //dhlu end
     // Detect if URL is file path and return proper string for it
     NSString *aUrlString = [aUrl isFileURL] ? [aUrl path] : [aUrl absoluteString];
@@ -843,11 +845,13 @@ inline static NSString *formatedSpeed(int64_t bytes, int64_t elapsed_milli) {
 - (void)refreshWeakNetwork{
     if (_mediaPlayer == nil)
         return;
-    int64_t bps = ijkmp_read_total_bytes(_mediaPlayer) * 8;
-    int64_t tcpSpeed = ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_TCP_SPEED, 0);
-   
-    [WeakNetwork ajust_buffer_timer:tcpSpeed mplay:_mediaPlayer btr:bps];
     
+    int tcpSpeed = (int) ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_TCP_SPEED, 0);
+    tcpSpeed *= 8;
+    if(0!=real_bitrate && 0!=tcpSpeed){
+    IJKLog(@"bitrate:%d tcpSpeed:%d \r\n", real_bitrate,tcpSpeed);
+    [WeakNetwork ajust_buffer_timer:tcpSpeed mplay:_mediaPlayer btr:real_bitrate];
+    }
 }
 //end dhlu
 - (void)refreshHudView
@@ -1193,6 +1197,12 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
              userInfo:@{IJKMPMoviePlayerPlaybackDidFinishReasonUserInfoKey: @(IJKMPMovieFinishReasonPlaybackEnded)}];
             break;
         }
+        case FFP_MSG_VIDEO_BITRATE:
+        {
+            real_bitrate = avmsg->arg2;
+            IJKLog(@"FFP_MSG_VIDEO_BITRATE: %d\n",real_bitrate);
+        }
+            break;
         case FFP_MSG_VIDEO_SIZE_CHANGED:
             IJKLog(@"FFP_MSG_VIDEO_SIZE_CHANGED: %d, %d\n", avmsg->arg1, avmsg->arg2);
             if (avmsg->arg1 > 0)

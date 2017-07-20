@@ -26,6 +26,7 @@
 		54A029B81D4700E6001C61C1 /* ijklongurl.c in Sources */ = {isa = PBXBuildFile; fileRef = 54A029B31D4700E6001C61C1 /* ijklongurl.c */; };
 		54A029B91D4700E6001C61C1 /* ijksegment.c in Sources */ = {isa = PBXBuildFile; fileRef = 54A029B41D4700E6001C61C1 /* ijksegment.c */; };
 		54A029BA1D4700E6001C61C1 /* ijkurlhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 54A029B51D4700E6001C61C1 /* ijkurlhook.c */; };
+		9A26A72D1F1CBDA500CF941E /* dump.c in Sources */ = {isa = PBXBuildFile; fileRef = 9A26A72C1F1CBDA500CF941E /* dump.c */; };
 		9A326E201F1B85A7000BC054 /* MoLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A326E1E1F1B85A7000BC054 /* MoLocationManager.h */; };
 		9A326E211F1B85A7000BC054 /* MoLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A326E1F1F1B85A7000BC054 /* MoLocationManager.m */; };
 		9A4D5ABD1EFB9B70008313E3 /* ping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4D5AB41EFB9AAB008313E3 /* ping.framework */; };
@@ -165,6 +166,7 @@
 		54A029B31D4700E6001C61C1 /* ijklongurl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ijklongurl.c; sourceTree = "<group>"; };
 		54A029B41D4700E6001C61C1 /* ijksegment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ijksegment.c; sourceTree = "<group>"; };
 		54A029B51D4700E6001C61C1 /* ijkurlhook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ijkurlhook.c; sourceTree = "<group>"; };
+		9A26A72C1F1CBDA500CF941E /* dump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dump.c; path = "../ffmpeg-armv7/libavformat/dump.c"; sourceTree = "<group>"; };
 		9A326E1E1F1B85A7000BC054 /* MoLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoLocationManager.h; sourceTree = "<group>"; };
 		9A326E1F1F1B85A7000BC054 /* MoLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoLocationManager.m; sourceTree = "<group>"; };
 		9A4D5AAF1EFB9AAB008313E3 /* ping.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ping.xcodeproj; path = ../ping/ping.xcodeproj; sourceTree = "<group>"; };
@@ -362,6 +364,14 @@
 			name = pipeline;
 			sourceTree = "<group>";
 		};
+		9A26A72B1F1CBD2000CF941E /* armFfmpegCcode */ = {
+			isa = PBXGroup;
+			children = (
+				9A26A72C1F1CBDA500CF941E /* dump.c */,
+			);
+			name = armFfmpegCcode;
+			sourceTree = "<group>";
+		};
 		9A4D5AB01EFB9AAB008313E3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -417,6 +427,7 @@
 		E66F8DBC17EEC2CF00354D80 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9A26A72B1F1CBD2000CF941E /* armFfmpegCcode */,
 				E6F727B517F2B1690043623F /* IJKMediaPlayer */,
 				E67C4E0219D15B0600415CEE /* IJKAVMoviePlayerController */,
 				E66F8DBE17EEC5DE00354D80 /* IJKMPMoviePlayerController */,
@@ -997,6 +1008,7 @@
 				E654EAC11B6B287E00B0F2D0 /* ijksdl_audio.c in Sources */,
 				E654EAC91B6B288A00B0F2D0 /* ijksdl_thread_ios.m in Sources */,
 				E654EAB31B6B285900B0F2D0 /* ijkmeta.c in Sources */,
+				9A26A72D1F1CBDA500CF941E /* dump.c in Sources */,
 				54A029B61D4700E6001C61C1 /* ijkasync.c in Sources */,
 				E6E1B9A81C741F72000C6C72 /* renderer_yuv420sp_vtb.m in Sources */,
 				E654EAD31B6B288A00B0F2D0 /* IJKSDLGLView.m in Sources */,

@@ -16,7 +16,7 @@
 @interface WeakNetwork : NSObject
 
 +(long)getSpeed:(long)tBytes mplay:(IjkMediaPlayer *)mp mntr:(IJKFFMonitor *)monitor;
-+(void)ajust_buffer_timer:(int64_t) tcpSpeed mplay:(IjkMediaPlayer *)mp btr:(int64_t)bitrate;
++(void)ajust_buffer_timer:(int) tcpSpeed mplay:(IjkMediaPlayer *)mp btr:(int)bitrate;
 +(void)set_buffering;
 @end
 

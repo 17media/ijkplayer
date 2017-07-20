@@ -85,7 +85,7 @@ static int curBuffering=0;
 }
 
 
-+(void)ajust_buffer_timer:(int64_t) tcpSpeed mplay:(IjkMediaPlayer *)mp btr:(int64_t)bitrate {
++(void)ajust_buffer_timer:(int) tcpSpeed mplay:(IjkMediaPlayer *)mp btr:(int)bitrate {
     
     checkTimes++;
     if(0!=tcpSpeed){
@@ -105,7 +105,7 @@ static int curBuffering=0;
         [TextLog LogText:LOG_FILE_NAME format:@"lt=sp&spd=%lld",curAvspeed];
         //curAvspeed,curAvRtt,curPingLoss,curBuffering,
         //1,3,5,7.
-        if( 0==curBuffering && (curAvspeed > 0.9*bitrate && bitrate!=0)) {//use the littlest buffer.
+        if( 0==curBuffering && (curAvspeed > 1.1*bitrate && bitrate!=0)) {//use the littlest buffer.
         //if( 0==curBuffering && curAvspeed > 1.1*bitrate && 0==curPingLoss && curAvRtt <= 250) {//use the littlest buffer.
             mp->ffplayer->dcc.current_high_water_mark_in_ms = 1000;
         }
@@ -113,7 +113,7 @@ static int curBuffering=0;
             mp->ffplayer->dcc.current_high_water_mark_in_ms += 3000;
             if(mp->ffplayer->dcc.current_high_water_mark_in_ms >7000) mp->ffplayer->dcc.current_high_water_mark_in_ms = 7;
         }
-        if(0 == curBuffering &&( (curAvspeed > 0.8*bitrate && bitrate!=0 )) ){
+        if(0 == curBuffering &&( (curAvspeed > 0.9*bitrate && bitrate!=0 )) ){
         //if(0 == curBuffering && 0==curPingLoss && ( curAvspeed > 1.1*bitrate || ( 0!=curAvRtt && curAvRtt < 200)) ){//
             mp->ffplayer->dcc.current_high_water_mark_in_ms -= 2000;
             if( mp->ffplayer->dcc.current_high_water_mark_in_ms <=1000 ) mp->ffplayer->dcc.current_high_water_mark_in_ms = 1000;

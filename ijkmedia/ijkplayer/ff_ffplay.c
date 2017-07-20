@@ -2395,7 +2395,49 @@ static int is_realtime(AVFormatContext *s)
         return 1;
     return 0;
 }
+//dhlu,static real bitrate.
+//static int count=0;
+static int64_t last_pts=0;
+static int duration=0;
+static int bytes_size=0;
+//static int bytes_size2=0;
+static void stat_bitrate(AVPacket* pkt,FFPlayer *ffp,AVFormatContext *ic){
     
+    int realBitRate=0;
+    int vdpfsBitRate=0;
+    int interavl=pkt->pts - last_pts;
+    duration+=interavl;
+    bytes_size+=pkt->size;
+//    bytes_size2 += pkt->size;
+//    count++;
+    
+//    av_log(ffp, AV_LOG_DEBUG, "vdpfs:%2.f fvps:%.2f avq2d:%.3f num:%d demi:%d  pktduration:%lld ffpduration:%lld curpts:%lld last_pts:%lld interavl:%lld pktsize:%d\r\n",
+//           ffp->stat.vdps,ffp->stat.vfps,av_q2d(ic->streams[pkt->stream_index]->time_base),ic->streams[pkt->stream_index]->time_base.num,ic->streams[pkt->stream_index]->time_base.den,pkt->duration,ffp->duration,pkt->pts,last_pts,interavl,pkt->size);
+    last_pts = pkt->pts;
+    
+    //vdpfs
+//    if( count > ffp->stat.vdps ){
+//        vdpfsBitRate = bytes_size2/count;
+//        av_log(ffp, AV_LOG_DEBUG, "vdpfsBitRate:%d vdpfs:%.2f bytes:%d count:%d \r\n",vdpfsBitRate,ffp->stat.vdps,bytes_size2,count);
+//        
+//        //notify
+//        //ffp_notify_msg3(ffp, FFP_MSG_VIDEO_SIZE_CHANGED, 0, vdpfsBitRate);
+//        //reset
+//        count = 0;
+//        bytes_size2 = 0;
+//    }
+    
+    if(duration > 1000){
+        realBitRate = (bytes_size*8*1000)/duration;
+        av_log(ffp, AV_LOG_DEBUG, "realBitRate:%d vdpfs:%.2f bytes:%d duration:%d \r\n",realBitRate,ffp->stat.vdps,bytes_size,duration);
+        //notify
+        ffp_notify_msg3(ffp, FFP_MSG_VIDEO_BITRATE, 0, realBitRate);
+        //reset
+        duration = 0;
+        bytes_size = 0;
+    }
+}
+//enddhlu
 /* this thread gets the stream from the disk or the network */
 static int read_thread(void *arg)
 {
@@ -2867,7 +2909,7 @@ static int read_thread(void *arg)
             continue;
         } else {
             is->eof = 0;
-        }
+        }//if (ret < 0)
         if (pkt->flags & AV_PKT_FLAG_DISCONTINUITY) {
             if (is->audio_stream >= 0) {
                 packet_queue_put(&is->audioq, &flush_pkt);
@@ -2880,7 +2922,7 @@ static int read_thread(void *arg)
             if (is->video_stream >= 0) {
                 packet_queue_put(&is->videoq, &flush_pkt);
             }
-        }
+        }//end if (pkt->flags & AV_PKT_FLAG_DISCONTINUITY)
 
         /* check if packet is in play range specified by user, then queue, otherwise discard */
         stream_start_time = ic->streams[pkt->stream_index]->start_time;
@@ -2892,7 +2934,12 @@ static int read_thread(void *arg)
 //                    ALOGE("[VIDEO][IN] ------------- %llu\n", pkt_ts);
 //                }
         ffp->accumulated_bytes += pkt->size;
-        
+        //dhlu
+        if (pkt->stream_index == is->video_stream ){
+            //av_log(ffp, AV_LOG_ERROR, "pktduration:%lld ffpduration:%lld\r\n",pkt->duration,ffp->duration);
+            stat_bitrate(pkt,ffp,ic);
+        }
+        //end dhlu
         pkt_in_play_range = ffp->duration == AV_NOPTS_VALUE ||
                 (pkt_ts - (stream_start_time != AV_NOPTS_VALUE ? stream_start_time : 0)) *
                 av_q2d(ic->streams[pkt->stream_index]->time_base) -
@@ -2920,7 +2967,7 @@ static int read_thread(void *arg)
                 ffp_check_buffering_l(ffp);
             }
         }
-    }
+    }//end for (;;)
 
     ret = 0;
  fail:
