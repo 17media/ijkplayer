@@ -21,7 +21,7 @@ static NSString *os=@"";//os type
 static NSString *osv=@"";//Os version
 static NSString *mod=@"";// phone model
 static NSString *cr=@"中华电信";
-static NSString *nt=@"";//net type
+static NSString *nt=@"";//net type,2g,3g,4g,wifi
 static NSString *lnt=@"";
 static NSString *ltt=@"";
 static NSString *mip=@"";//my public ip.
@@ -32,6 +32,7 @@ static NSString *host=@"";
 static NSString *publicStr=@"";//app version 17media.
 static NSString *pingRtt=@"";//ping round trip interval.
 static NSString *pingloss=@"";//ping packet loss.
+static NSString *sid=@"";//ping packet loss.
 
 
 @implementation TextLog : NSObject
@@ -104,8 +105,20 @@ static NSString *pingloss=@"";//ping packet loss.
     rg = rgstr;
 }
 
++(void)Setav17:(NSString*)av17str{
+    av17 = av17str;
+}
+
 +(void)Sethost:(NSString*)hoststr{
-    host = [[NSString alloc] initWithString:hoststr];
+    host = hoststr;
+}
+
++(NSString*)Gethost{
+    return  host;
+}
+
++(void)Setsid:(NSString*)sidstr{
+    sid = sidstr;
 }
 
 //for ping.
@@ -137,8 +150,8 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
-                 time,mc,uid,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,mip,rg,av17,pt,host,url];
+    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&rg=%@&av17=%@&pt=%@&host=%@&sid=%@&url=%@&",
+                 time,mc,uid,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,rg,av17,pt,host,sid,url];
     return  publicStr;
 }
 
@@ -191,7 +204,9 @@ static STDPingServices    *pingServices=NULL;
     //send to app
     [[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: logtxt];
     //end
+#ifdef DEBUG
     [TextLog writefile:logtxt fn:fileName];
+#endif
 }
 
 @end

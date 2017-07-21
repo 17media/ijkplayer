@@ -306,7 +306,10 @@ __attribute__((used)) static void importIJKMedia ()
         if (!_streamURL) {
             _URL = [NSURL URLWithString:_urlString];
             [TextLog Seturl:_urlString];
-            [TextLog Sethost:_URL.host];
+            //if has set it.don't set agian.
+            if( false == [[TextLog Gethost] ijk_isIpv4] ){
+                [TextLog Sethost:_URL.host];
+            }
             [TextLog Setpt:_URL.scheme];
             
             //NSString* str = [[NSString alloc] initWithString:_URL.host];

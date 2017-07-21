@@ -31,7 +31,11 @@
 +(void)Setmip:(NSString*)mipstr;
 +(void)Seturl:(NSString*)urlstr;
 +(void)Setrg:(NSString*)rgstr;
++(void)Setav17:(NSString*)av17str;
 +(void)Sethost:(NSString*)hoststr;
++(NSString*)Gethost;
++(void)Setsid:(NSString*)sidstr;
+
 
 + (void)StartPing:(NSString*)host;
 +(void)LogText:(NSString *)fileName format:(NSString *)format, ...;
