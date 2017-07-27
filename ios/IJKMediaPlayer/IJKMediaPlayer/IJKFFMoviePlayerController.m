@@ -51,6 +51,7 @@ static const char *kIJKFFRequiredFFmpegVersion = "ff3.1--ijk0.6.1--20160824--001
 //dhlu begin
 static bool need_ping_ip;
 static NSString* ip;
+static int logbit = 0;
 //end dhlu
 typedef uint64_t (^VideoSyncTimestampCallback)(uint64_t timestamp);
 typedef void(^VideoSyncFinishCallback)(uint64_t timestamp);
@@ -851,9 +852,16 @@ inline static NSString *formatedSpeed(int64_t bytes, int64_t elapsed_milli) {
     
     int tcpSpeed = (int) ijkmp_get_property_int64(_mediaPlayer, FFP_PROP_INT64_TCP_SPEED, 0);
     tcpSpeed *= 8;
+
     if(0!=real_bitrate && 0!=tcpSpeed){
-    IJKLog(@"bitrate:%d tcpSpeed:%d \r\n", real_bitrate,tcpSpeed);
-    [WeakNetwork ajust_buffer_timer:tcpSpeed mplay:_mediaPlayer btr:real_bitrate];
+        logbit++;
+        if(logbit>10){//record 10 per second
+            [TextLog LogText:LOG_FILE_NAME format:@"lt=rb&bt=%d",real_bitrate];
+            logbit =0;
+        }
+          //tempory,close it.
+//        IJKLog(@"bitrate:%d tcpSpeed:%d \r\n", real_bitrate,tcpSpeed);
+//        [WeakNetwork ajust_buffer_timer:tcpSpeed mplay:_mediaPlayer btr:real_bitrate];
     }
 }
 //end dhlu

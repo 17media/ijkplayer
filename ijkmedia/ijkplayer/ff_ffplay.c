@@ -3959,8 +3959,8 @@ void ffp_check_buffering_l(FFPlayer *ffp)
         if (hwm_in_ms > ffp->dcc.last_high_water_mark_in_ms)
             hwm_in_ms = ffp->dcc.last_high_water_mark_in_ms;
 
-        //dhlu,don't ajust here.see weaknetwork.
-        //ffp->dcc.current_high_water_mark_in_ms = hwm_in_ms;
+        //dhlu,don't ajust here.see weaknetwork.just use log.
+        ffp->dcc.current_high_water_mark_in_ms = hwm_in_ms;
         //end dhlu
 
         if (is->buffer_indicator_queue && is->buffer_indicator_queue->nb_packets > 0) {
