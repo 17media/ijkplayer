@@ -150,8 +150,10 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&rg=%@&av17=%@&pt=%@&host=%@&sid=%@&url=%@&",
-                 time,mc,uid,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,rg,av17,pt,host,sid,url];
+//    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&rg=%@&av17=%@&pt=%@&host=%@&sid=%@&url=%@&",
+//                 time,mc,uid,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,rg,av17,pt,host,sid,url];
+    publicStr = [NSString stringWithFormat:@"mc=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&rg=%@&av17=%@&pt=%@&host=%@&sid=%@&url=%@&",
+                 mc,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,rg,av17,pt,host,sid,url];
     return  publicStr;
 }
 
@@ -193,6 +195,28 @@ static STDPingServices    *pingServices=NULL;
     [fileHandle closeFile];
 }
 
+
++(NSMutableDictionary*)ToDictiionary:(NSString *)lxt{
+    NSMutableDictionary *dict=[NSMutableDictionary dictionaryWithObjectsAndKeys:nil];
+    NSString* tmp = [NSString stringWithFormat:@"%@",lxt];
+    NSArray *aArray = [tmp componentsSeparatedByString:@"&"];
+
+    long int count = [aArray count];
+    for (int i = 0 ; i < count; i++) {
+        //NSLog(@"1遍历array: %zi-->%@",i,[aArray objectAtIndex:i]);
+        NSString* str = [aArray objectAtIndex:i];
+        if(nil != str){
+            NSArray *aArray1 = [str componentsSeparatedByString:@"="];
+            NSString* key = [aArray1 objectAtIndex:0];
+            NSString* value = [aArray1 objectAtIndex:1];
+            if(nil!=key){
+                [dict setObject:value forKey:key];
+            }
+        }
+    }
+    return dict;
+}
+
 //format:  "lt=www&" "log=www&"
 +(void)LogText:(NSString *)fileName format:(NSString *)format, ...{
     va_list args;
@@ -201,8 +225,11 @@ static STDPingServices    *pingServices=NULL;
     va_end(args);
     
     NSString *logtxt =[NSString stringWithFormat:@"%@%@",[TextLog GetPublicText ],str];
+    //to dictionary
+    NSMutableDictionary *dict = [TextLog ToDictiionary:logtxt];
     //send to app
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: logtxt];
+    //[[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: logtxt];
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: dict];
     //end
 #ifdef DEBUG
     [TextLog writefile:logtxt fn:fileName];

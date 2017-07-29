@@ -48,8 +48,24 @@
 - (void) NotificationFromIJK:(NSNotification *)notification{
     
     if ([[notification name] isEqualToString:@"NotificationFromIJK_Log"]){
-        NSString *theString = [notification object];
-        int k=0;
+        //NSString *theString = [notification object];
+        //int k=0;
+        //dictionary
+        NSMutableDictionary *dictionary3 = [notification object];
+        //一般枚举
+        NSArray *keys = [dictionary3 allKeys];
+        NSString* tmp=@"";;
+        int length = [keys count];
+        for (int i = 0; i < length; i ++) {
+            id key = [keys objectAtIndex:i];
+            id obj = [dictionary3 objectForKey:key];
+            if(0==i){
+                tmp = [NSString stringWithFormat:@"%@=%@",key,obj];
+            }else{
+                tmp = [tmp stringByAppendingFormat:@"&%@=%@",key,obj];
+            }
+        }
+         NSLog(@"111notify:%@",tmp);
     }
 }
 //end dhlu.
