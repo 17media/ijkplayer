@@ -93,7 +93,7 @@
     [options setFormatOptionValue:@"audio" forKey:@"sync"];
     [options setPlayerOptionIntValue:1 forKey:@"videotoolbox-handle-resolution-change"];
     //[options setPlayerOptionIntValue:15 forKey:@"min-frames"];
-    [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];
+    [options setPlayerOptionIntValue:1 forKey:@"packet-buffering"];
     [options setFormatOptionIntValue:0 forKey:@"analyzeduration"];
     [options setFormatOptionIntValue:1 forKey:@"fpsprobesize"];
 

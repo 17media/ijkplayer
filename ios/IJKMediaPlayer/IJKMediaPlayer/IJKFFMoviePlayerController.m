@@ -1313,7 +1313,7 @@ inline static void fillMetaInternal(NSMutableDictionary *meta, IjkMediaMeta *raw
                 [TextLog StartPing:ip];
             }
             //use buffer agian.
-            _mediaPlayer->ffplayer->packet_buffering = 1;
+            //_mediaPlayer->ffplayer->packet_buffering = 1;
             //end dhlu.
             IJKLog(@"FFP_MSG_VIDEO_RENDERING_START:\n");
             [self LogBaseInfo];
